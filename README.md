@@ -86,7 +86,7 @@
 **Emphasis**: `*Italic*, **Bold**, ***Combined***`  
 **Links**: `(text)[link URI]`  
 **Image**: `!(alt name)[img URI]`  
-**Unordered list**: `+, -, or -`  
+**Unordered list**: `+, -, or *`  
 **Ordered list**: `Numbers`  
 **Blockquote**: `>text`  
 **Horizontal line**: `---, ***, or ___`  

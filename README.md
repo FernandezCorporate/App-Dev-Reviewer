@@ -94,5 +94,78 @@
 **Multi-line code**: `[backtick(x3)]code snippet[backtick(x3)]`
 
 
+## 5. Creating project (SetUp)
+5.1 **Create environment**: 
+> python -m venv [virtual env name] 
 
+5.2 **Create remote repo then clone it inside environment**:
+> cd [virtual env name]  
+git clone [GitHub URL]
 
+5.3 **Install Django**:
+> Scripts\activate  
+pip install Django  
+
+5.4 **Create project**:
+> cd [local repo name]  
+django-admin startproject [project name] 
+
+5.5 **Create application**:
+> cd [project folder]  
+python manage.py startapp [app name] 
+
+5.6 **Register app in settings.py**:
+> INSTALLED_APPS = ["django.cont..., "App name",] 
+
+5.7 **Setup database**:
+> python manage.py makemigrations  
+python manage.py migrate 
+
+5.8 **Test server**:
+> python manage.py runserver  
+*CTRL + C* 
+
+## 6. Create models and Admin  
+6.1 **Create models**:  
+```
+class BaseModel(models.Model):
+    field = models.Datatype(params) 
+    
+    class Meta:
+        abstract = True
+
+class ModelName(BaseModel):
+    field = models.Datatype(params)
+
+    def __str__(self):
+        return self.field
+```  
+6.2 **Migrate database changes**:
+> python manage.py makemigrations  
+python manage.py migrate 
+
+6.3 **Register models in admin.py**:  
+```
+from .models import ModelName
+
+admin.site.register(ModelName)
+``` 
+
+6.4 **Create superuser**:
+> python manage.py createsuperuser 
+
+6.5 **Refactor admin.py**:  
+```
+#Remove: admin.site.register(ModelName)
+
+@admin.register(ModelName)
+class ModelNameAdmin(admin.ModelAdmin):
+    list_display = ("field1", "field2") #Visible columns
+    search_fields = ("field1, "field2") #Search value in specified fields
+    list_filter = ("field1", "field2") #Filter by specified fields
+``` 
+
+6.6 **Miscellaneous**:
+> (1) pip freeze > requirements.txt  
+(2) *Create README.md*  
+(3) *Add and commit in between tasks*

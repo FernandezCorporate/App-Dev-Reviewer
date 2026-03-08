@@ -78,5 +78,21 @@
 **Create superuser**: Create admin user account on local project
 > python manage.py createsuperuser
 
+## 4. Markdown
+
+**Heading**: `#Heading 1 to ######Heading 6`  
+**Paragraph**: `P1 [space][enter][enter] P2`  
+**Line break**: `L1 [space][space][enter] L2`  
+**Emphasis**: `*Italic*, **Bold**, ***Combined***`  
+**Links**: `(text)[link URI]`  
+**Image**: `!(alt name)[img URI]`  
+**Unordered list**: `+, -, or -`  
+**Ordered list**: `Numbers`  
+**Blockquote**: `>text`  
+**Horizontal line**: `---, ***, or ___`  
+**Single-line code**: `[backtick(x1)]code snippet[backtick(x1)]`  
+**Multi-line code**: `[backtick(x3)]code snippet[backtick(x3)]`
+
+
 
 

@@ -288,7 +288,7 @@ class ModelNameAdmin(admin.ModelAdmin):
 `{% elif page_num > page_obj.number|add:'-3' and page_num < page_obj.number|add:'3' %}`: Checks if the current page number has at least two pages behind and in front of it; if true, load a page button for them  
 `{{ page_num }}`: Call the current value of page_num in the loop  
 `{% if page_obj.has_next %}...{% endif %}`: Checks if current page has a next page number  
-`{{ page_obj.previous_page_number }}`: Call and set the next page number value as the link href  
+`{{ page_obj.next_page_number }}`: Call and set the next page number value as the link href  
 `{% if page_obj.number != paginator.num_pages %}`: Check if current page is not the maximum (last) page  
 `{{ paginator.num_pages }}`: Count of all page numbers  
 `{{ object_list.count }}`: Count of rows presented in the current page  

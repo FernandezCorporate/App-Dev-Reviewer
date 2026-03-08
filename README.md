@@ -294,3 +294,164 @@ class ModelNameAdmin(admin.ModelAdmin):
 `{{ object_list.count }}`: Count of rows presented in the current page  
 `{{ paginator.count }}`: Count of all records
 
+7.5 **Template Tags**:  
+`{{ variable }}`: Calling a variable using django tags.  
+`{% load static %}`: Loads static files: img, css, js.  
+`{% block [block name] %}(empty){% endblock %}`: Allocates an empty space (placeholder) to insert contents of other html files; usually written in base.html (parent html of other html).    
+`{% extends 'base.html' %}{% block [block name] %}...{% endblock%}`: Fills in the {% block [block name] %}...{% endblock %} by matching the child block name to the parent block name.  
+
+7.6 **Mapping template and static folders**:  
+(1) Modify settings.py:  
+```
+import os
+
+TEMPLATES = [
+    {
+        "BACKEND": "djan...
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
+        "APP_D...
+    }
+]
+
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = (BASE_DIR / 'static',)
+
+#This code snippet tells the system where the templates and static folders are located such that tags ({}) can be used.
+```
+
+
+## 8.Views
+8.1 **ListView**
+
+> (1) Views.py  
+```
+from django.views.generic.list import ListView
+from appName.models import ModelName
+
+class ModelNameListView(ListView):
+    model = ModelName  
+    context_object_name = 'chosenViewName'  
+    template_name = 'Modellist.html'
+    paginate_by = number
+```
+
+> (2) URLS.py  
+```
+from appName.views import ModelNameListView
+
+urlpatterns = [
+    path('endpoint_name', ModelNameListView.as_view(), name='chosenURLName',)
+]
+```
+
+> (3) Home.html
+```
+<a href="{% url 'chosenURLName' %}">
+```
+
+> (4) Design Modellist.html
+
+8.2 **CreateView**
+
+> (1) Views.py  
+```
+from django.views.generic.edit import CreateView
+from appName.forms import ModelForm
+from django.urls import reverse_lazy
+
+class ModelNameCreateView(CreateView):
+    model = ModelName  
+    form_class =  ModelForm
+    template_name = 'modelForm.html'
+    success_url = reverse_lazy('chosenURLName')
+```
+
+>(2) Forms.py
+```
+from django.forms import ModelForm
+from django import forms
+from .models import ModelName
+
+class ModelNameForm(ModelForm):
+    class Meta:
+        model = ModelName
+        fields = "__all__"
+```
+
+> (3) URLS.py  
+```
+from appName.views import ModelNameListView, ModelNameCreateVIew
+
+urlpatterns = [
+    path('endpoint_name/add', ModelNameCreateView.as_view(), name='chosenURLName-add',)
+]
+```
+
+> (4) Modellist.html
+```
+<a href="{% url 'chosenURLName-add' %}">Add</a>
+```
+
+> (5) Design modelForm.html and inside the form tag, write this: 
+```
+{% csrf_token %}{% include 'includes/form.html' %}
+```
+
+
+8.3 **UpdateView**
+> (1) Views.py  
+```
+from django.views.generic.edit import CreateView, UpdateView
+
+class ModelNameUpdateView(UpdateView):
+    model = ModelName  
+    form_class =  ModelForm
+    template_name = 'modelForm.html'
+    success_url = reverse_lazy('chosenURLName')
+```
+
+> (2) URLS.py    
+```
+from appName.views import ModelNameListView, ModelNameCreateVIew, ModelUpdateView
+
+urlpatterns = [
+    path('endpoint_name/<pk>', ModelNameUpdateView.as_view(), name='chosenURLName-edit',)
+]
+```
+
+> (3) Modellist.html
+```
+<a href="endpoint_name/{{ object.id }}">Add</a>
+```  
+
+8.4 **DeleteView**  
+> (1) Views.py  
+```
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+class ModelDeleteView(DeleteView):
+    model = ModelName  
+    template_name = 'modelDel.html'
+    success_url = reverse_lazy('chosenURLName')
+```
+
+> (2) URLS.py
+```
+from appName.views import ModelNameListView, ModelNameCreateVIew, ModelUpdateView, ModelDeleteView
+
+urlpatterns = [
+    path('endpoint_name/<pk>/delete', ModelDeleteView.as_view(), name='chosenURLName-delete',)
+]
+```
+
+> (3) Modellist.html
+```
+<a href="endpoint_name/{{ object.id }}/delete">Add</a>
+```  
+
+> (4) Design modelDel.html then inside the form tag, add this:  
+```
+{% csrf_token %}{% include 'includes/form.html' %}
+```
+

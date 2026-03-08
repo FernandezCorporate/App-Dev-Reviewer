@@ -279,7 +279,7 @@ class ModelNameAdmin(admin.ModelAdmin):
 {% endif %}
 ``` 
 
-`{% if is_paginated %}`: Checks views.py if 'paginate_by' is set for a model  
+> `{% if is_paginated %}`: Checks views.py if 'paginate_by' is set for a model  
 `{% if page_obj > 1 %}...{% endif %}`: Checks if the current page is not the first page  
 `{% if page_obj.has_previous %}...{% endif %}`: Checks if the current page has a previous page  
 `{{ page_obj.previous_page_number }}`: Call and set the previous page number value as the link href.  
@@ -293,3 +293,4 @@ class ModelNameAdmin(admin.ModelAdmin):
 `{{ paginator.num_pages }}`: Count of all page numbers  
 `{{ object_list.count }}`: Count of rows presented in the current page  
 `{{ paginator.count }}`: Count of all records
+

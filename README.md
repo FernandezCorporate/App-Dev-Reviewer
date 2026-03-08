@@ -169,3 +169,127 @@ class ModelNameAdmin(admin.ModelAdmin):
 > (1) pip freeze > requirements.txt  
 (2) *Create README.md*  
 (3) *Add and commit in between tasks*
+
+## 7. Frontend  
+7.1 **Static Files**:  
+> (1) Create folder 'static' inside project folder  
+(2) Store css, js, and img assets here  
+(3) Link css using: `{% static '/css/stylesheet.css' %}`  
+
+7.2 **Templates**:  
+> (1) Create templates folder inside project folder  
+(2) Setup includes folder inside templates  
+
+7.3 **Forms**:  
+> (1) Install widget tweaks: pip install django-widget-tweaks  
+(2) Register widget tweaks in settings.py: `INSTALLED_APPS = ["django.cont..., "App name", "widget_tweaks",]`  
+(3) Create form.html inside /includes folder  
+
+(4) Edit form.html with your own html design and render forms using this django tags:  
+```
+{% load widget_tweaks %}
+
+{% for field in form %}
+<div>
+    <label>{{ field.label_tag }}</label>
+    <div>
+        {% render_field field class="form-control" %}
+    </div>
+
+    {% for error in field.errors %}
+    <div>
+        {{ error }}
+    </div>
+</div>
+{% endfor %}
+```
+
+> `{% load widget_tweaks %}` : Imports widget tweaks functionalities  
+`{% for field in form %}...{% endfor %}`: Loops through all fields specified in forms.py  
+`{{ field.label_tag }}`: Calls and loads the current field/variable name  
+`{% render_field field class="form-control" %}`: Loads an input tag with the appropriate type. (Ex: type='text' for models.Charfield)  
+`{% for error in field.errors %}...{% endfor %}`: Loops through all errors during input  
+`{{ error }}`: Loads the error  
+
+7.4 **Pagination**:  
+> (1) Create pagination.html inside /includes folder  
+
+(2) Edit pagination.html using these tags:  
+```
+{% if is_paginated %}
+<ul>
+    {% if page_obj > 1 %}
+    <li>
+        <a href="?page=1">First</a>
+    </li>
+
+    {% else %}
+    <li class="disabled">
+        <span>First</span>
+    </li>
+    {% endif %}
+
+    {% if page_obj.has_previous %}
+    <li>
+        <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+    </li>   
+
+    {% else %}
+    <li class="disabled">
+        <span>Prev</span>
+    </li>
+    {% endif %}  
+
+    {% for page_num in paginator.page_range %}
+        {% if page_obj.number == page_num %} 
+        <li>
+            <span>{{ page_num }}</span>
+        </li>
+
+        {% elif page_num > page_obj.number|add:'-3' and page_num < page_obj.number|add:'3' %}
+        <li>
+            <a href="?page={{ page_num }}">{{ page_num }}</a>
+        </li>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <li>
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+    </li>   
+
+    {% else %}
+    <li class="disabled">
+        <span>Next</span>
+    </li>
+    {% endif %}  
+
+    {% if page_obj.number != paginator.num_pages %}
+    <li>
+        <a href="?page={{ paginator.num_pages }}">Last</a>
+    </li>  
+
+    {% else %}
+    <li class="disabled">
+        <span>Last</span>
+    </li>
+    {% endif %}
+</ul>
+<p>{{ object_list.count }} out of {{ paginator.count }}</p>
+{% endif %}
+``` 
+
+`{% if is_paginated %}`: Checks views.py if 'paginate_by' is set for a model  
+`{% if page_obj > 1 %}...{% endif %}`: Checks if the current page is not the first page  
+`{% if page_obj.has_previous %}...{% endif %}`: Checks if the current page has a previous page  
+`{{ page_obj.previous_page_number }}`: Call and set the previous page number value as the link href.  
+`{% for page_num in paginator.page_range %}...{% endfor %}`: Loops throug all page numbers  
+`{% if page_obj.number == page_num %}...{% endif %}`: Check if the looped number is the current page number selected; if true, disabling this tag is suggested  
+`{% elif page_num > page_obj.number|add:'-3' and page_num < page_obj.number|add:'3' %}`: Checks if the current page number has at least two pages behind and in front of it; if true, load a page button for them  
+`{{ page_num }}`: Call the current value of page_num in the loop  
+`{% if page_obj.has_next %}...{% endif %}`: Checks if current page has a next page number  
+`{{ page_obj.previous_page_number }}`: Call and set the next page number value as the link href  
+`{% if page_obj.number != paginator.num_pages %}`: Check if current page is not the maximum (last) page  
+`{{ paginator.num_pages }}`: Count of all page numbers  
+`{{ object_list.count }}`: Count of rows presented in the current page  
+`{{ paginator.count }}`: Count of all records

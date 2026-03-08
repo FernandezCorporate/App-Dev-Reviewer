@@ -41,5 +41,42 @@
 **Pull to local**: Download changes made in remote repository
 > git pull origin [branch name]
 
+## 2. Python commands
+
+**Install Packages**: Install existing packages like Django, Faker etc.
+> pip install [package]
+
+**Save installed packages**: Save package name and version in a text file
+> pip freeze > filename.txt
+
+**Install packages from a file**: Install multiple packages at once
+> pip install -r filename.txt
+
+**Create virtual environment**: Create virtual env that stores and handles dependencies
+> python -m venv [virtual env name]
+
+**Activate the virtual env**: Activate virtual env such that packages installed shall be located here. (Inside virtual env directory)
+> Scripts\activate
+
+## 3. Django commands
+
+**Create new project**: Create the main folder for the django project
+> django-admin startproject [project name]
+
+**Create a new app**: Inside folder where 'manage.py' is, create a new app
+> python manage.py startapp [app name]
+
+**Run server**: Run and test a server to host application
+> python manage.py runserver [IP]:[Port]
+
+**Make migrations**: Checks all modifications made to database and models
+> python manage.py makemigrations
+
+**Migrate**: Migrate or apply changes made to database and models
+> python manage.py migrate
+
+**Create superuser**: Create admin user account on local project
+> python manage.py createsuperuser
+
 
 

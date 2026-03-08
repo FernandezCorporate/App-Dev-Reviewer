@@ -455,3 +455,68 @@ urlpatterns = [
 {% csrf_token %}{% include 'includes/form.html' %}
 ```
 
+## 9. Search, Context data and Sort
+9.1 **Search/Filter** 
+> (1) modellist.html  
+```
+<form action="{% url 'chosenURLName' %}">
+    <input type='text' name='q'>
+</form>
+```
+
+> (2) Views.py**  
+```
+from django.db.models import Q
+
+class ModelNameListView(ListView):
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        query = self.request.GET.get('q')
+
+        if query:
+            qs = qs.filter(
+                Q(field__icontains=query)
+            )
+```
+
+9.2 **Context data**
+> (1) Views.py  
+```
+from django.utils import timezone
+
+class ModelNameListView(ListView):
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get.context_data(**kwargs)
+        context["key"] = ModelName.objects.count()
+        
+        return context
+```
+
+> (2) Home.html or any html  
+```
+{{ key }}
+```
+
+9.3 **Sorting**
+> (1) Static (fixed)  
+```
+class ModelNameListView(ListView):
+    ordering = ["field1", "field2"]
+```
+
+> (2) Dynamic  
+```
+class ModelNameListView(ListView):
+
+    def get_ordering(self):
+        allowed = ["field1", "field2"]
+        sort_by = self.request.GET.get("sort_by")
+
+        if sort_by in allowed:
+            return sort_by
+
+        return "field1"
+```

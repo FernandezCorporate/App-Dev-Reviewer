@@ -464,7 +464,7 @@ urlpatterns = [
 </form>
 ```
 
-> (2) Views.py**  
+> (2) **Views.py**  
 ```
 from django.db.models import Q
 
@@ -520,3 +520,74 @@ class ModelNameListView(ListView):
 
         return "field1"
 ```
+
+## 10. Login Auth and Socials
+> (1) Install dependencies:  
+pip install django-allauth
+pip install requests
+pip install PyJWT
+pip install cryptography
+
+> (2) Settings.py
+```
+INSTALLED_APPS = [
+    ...,
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+]
+
+SITE_ID = 2
+AUTHENTICATION_BACKENDS = [
+'django.contrib.auth.backends.ModelBackend',
+'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+MIDDLEWARE = [
+    ...,
+    'allauth.account.middleware.AccountMiddleware',
+    ...
+]
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/' 
+LOGOUT_REDIRECT_URL = '/accounts/login/' 
+ACCOUNT_LOGOUT_REDIRECT_URL = '/' 
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_LOGIN_METHODS = {"username", "email"}
+ACCOUNT_SIGNUP_FIELDS = [
+    "username*",
+    "email*",
+    "password1*",
+    "password2*",
+]
+```
+
+> (3) URLS.py
+```
+from django.urls import path, include
+
+urlpatterns = [
+    path("accounts/", include("allauth.urls")),
+]
+```
+
+> (4) Go to https://console.cloud.google.com/ -> APIs & Services -> Credentials  
+(5) Create credentials -> OAuth 2.0 Client ID  
+(6) Select 'Web Application' for Application type  
+(7) Set the Client Name  
+(8) Set the Authorized redirect URIs to: http://127.0.0.1:8000/accounts/google/login/callback/  
+(9) Confirm all then save Client ID and Client Secret  
+(10) Run server then go /admin  
+(11) Add Social Applications with the following inputs:  
+Provider: Google  
+Name: Google Login  
+Client ID: paste  
+Secret: paste  
+Sites: 127.0.0.1:8000  
+(12) Run migrations; makemigrations and migrate  
+(13) Create and design templates/account/login.html  
+(14) Create and design templates/socialaccount/login.html
